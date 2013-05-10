@@ -14,6 +14,8 @@ Planned usage is as follows:
 
 and the contact info will print to the screen
 
+*Would like to include "closest spelling" feature, when user has mispelled the name of the staff member but we can guess the closest names and present the 3 nearsest choices.
+
 User Story
 ----------
 As a staff member I need to contact someone from another department whose firstname I know.
