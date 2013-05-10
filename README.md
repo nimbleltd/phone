@@ -14,6 +14,13 @@ Planned usage is as follows:
 
 and the contact info will print to the screen
 
+User Story
+----------
+As a staff member I need to contact someone from another department whose firstname I know.
+I want to contact that person quickly and easily.
+If I can type "phone <firstname>/<lastname><mis-spelled-name>" from my terminal and have contact info displayed.
+That would save me time.
+
 Demo
 ----
 To demo the app, you'll have to download it and try it yourself.
