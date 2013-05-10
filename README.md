@@ -10,7 +10,8 @@ data stored in Active Record
 
 Planned usage is as follows:
 ----------------------------
-> execute "phone <firstname>" 
+> "phone <firstname>" 
+
 and the contact info will print to the screen
 
 Demo
