@@ -10,10 +10,14 @@ require 'fastercsv'
   class Phone
     attr_accessor :file
     attr_accessor :headers
+    attr_accessor :name
+
 
     CSVFILE = "/Users/happyDay/Downloads/nss-contact-info.csv"
 
-    @name = ARGV[0]
+    def user_input
+      ARGV[0]
+    end
     #year = ARGV[1]
 
     options = {}
@@ -39,15 +43,79 @@ require 'fastercsv'
       opt.on("-h","--help"," help") do
         puts opt_parser
       end
+      opt.on("-all","--all"," all") do
+        puts opt_parser
+      end
+
     end
+
 
     opt_parser.parse!
 
+    def initialize
+      open_file
+      # puts "data file initialized..."
+    end
+
     def open_file
       filename = "/Users/happyDay/Downloads/nss-contact-info.csv"
-      puts "Trying to open file with FasterCSV"
+      # puts "Trying to open file with FasterCSV"
       @file = FasterCSV.open(filename, {:headers => true, :return_headers => true, :header_converters => :symbol})
       @headers = @file.readline
+    end
+
+    def print_first_name
+      @file.each do |line|
+        puts "#{line[:first_name]} #{line[:last_name]} #{line[:phone]}"
+      end
+    end
+
+    def print_last_name
+      @file.each do |line|
+        puts line[:last_name]
+      end
+    end
+
+    def print_part_of_town
+      @file.each do |line|
+        puts line[:part_of_town]
+      end
+    end
+
+    def print_phone
+      @file.each do |line|
+        original_phone = line[:phone]
+        clean = original_phone.gsub(".","-")
+        puts clean
+      end
+    end
+
+    def print_user_info
+      unless user_input.nil?
+        @file.each do |line|
+          clean_phone = line[:phone].gsub(".","-")
+          result = "\n==================\e[47m\nName:   #{line[:first_name]} #{line[:last_name]}\e[0m\nEmail:  #{line[:email]}\n\e[47mPhone:  #{clean_phone}\e[0m\nGithub: #{line[:github]}\n\e[47mTown:   #{line[:part_of_town]}\e[0m\n\n"
+
+          # [line[:first_name], line[:last_name], line[:part_of_town]].any? { |contact_data| contact_data.downcase.include?(user_input.downcase) }
+
+          # [:first_name, :last_name, :part_of_town].any? { |contact_data| line[contact_data].downcase.include?(user_input.downcase) }
+
+          # if user_input != 'all' && line[:first_name].downcase.include?(user_input.downcase) || line[:last_name].downcase.include?(user_input.downcase) || line[:part_of_town].downcase.include?(user_input.downcase)
+
+          if user_input != 'all' && user_input_matches?(line, :first_name, :last_name, :part_of_town)
+
+            puts "\nPhone Results#{result}"
+          # elsif i > 25
+          #   puts "\e[31m***   Unable to find #{user_input}, please check spelling.   ***\e[0m"
+          elsif user_input.downcase == "all"
+            puts result
+          end
+        end
+      end
+    end
+
+    def user_input_matches?(line, *field_types)
+      field_types.any? { |contact_data| line[contact_data].downcase.include?(user_input.downcase) }
     end
 
 
@@ -82,23 +150,23 @@ require 'fastercsv'
     # end
     # end
 
-    User.create(:firstname => 'mike', :lastname => 'smith', :part_of_town => 'wrong_side_of_the_tracks')
+    # User.create(:firstname => 'mike', :lastname => 'smith', :part_of_town => 'wrong_side_of_the_tracks')
 
-    mike = User.where(:firstname => "mike").first
+    # mike = User.where(:firstname => "mike").first
 
-    puts mike.firstname
+    # puts mike.firstname
 
-    puts mike.lastname
+    # puts mike.lastname
 
-    puts mike.part_of_town
+    # puts mike.part_of_town
 
     # Users.destroy_all
 
     case ARGV[0]
-    when "-i"
-      puts "boobs #{@name}"
-    when "stop"
-      puts "call stop on options #{options.inspect}"
+    when "-h"
+      puts opt_parser
+    when "-all"
+      puts "\n==================\e[47m\nName:   #{line[:first_name]} #{line[:last_name]}\e[0m\nEmail:  #{line[:email]}\n\e[47mPhone:  #{clean_phone}\e[0m\nGithub: #{line[:github]}\n\e[47mTown:   #{line[:part_of_town]}\e[0m"
     when "restart"
       puts "call restart on options #{options.inspect}"
     when nil
@@ -106,4 +174,11 @@ require 'fastercsv'
     end
 end
 
-bob = Phone.new
+phone = Phone.new
+# phone.print_first_name
+# phone.file.rewind
+# phone.print_phone
+# phone.file.rewind
+# phone.print_last_name
+# phone.file.rewind
+phone.print_user_info
